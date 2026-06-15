@@ -29,7 +29,7 @@ import com.viaoa.datasource.jdbc.db.Database;
 import com.viaoa.datasource.jdbc.db.Link;
 import com.viaoa.datasource.jdbc.db.Table;
 import com.viaoa.datasource.jdbc.delegate.ConverterDelegate;
-import com.viaoa.graph.OAGraphInternal;
+import com.viaoa.graph.api.internal.OAGraphInternal;
 import com.viaoa.graph.service.object.OAObjectInfoService;
 import com.viaoa.graph.service.object.OAObjectKeyService;
 import com.viaoa.graph.service.object.OAObjectReflectService;

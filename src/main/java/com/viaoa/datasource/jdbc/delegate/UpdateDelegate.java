@@ -20,13 +20,13 @@ import java.sql.Statement;
 import java.util.Vector;
 import java.util.logging.Logger;
 
-import com.viaoa.compare.OANotExist;
+import com.viaoa.compare.match.OAMatchNotExist;
 import com.viaoa.datasource.jdbc.OADataSourceJDBC;
 import com.viaoa.datasource.jdbc.db.Column;
 import com.viaoa.datasource.jdbc.db.DBMetaData;
 import com.viaoa.datasource.jdbc.db.Link;
 import com.viaoa.datasource.jdbc.db.Table;
-import com.viaoa.graph.OAGraphInternal;
+import com.viaoa.graph.api.internal.OAGraphInternal;
 import com.viaoa.graph.service.object.OAObjectInfoService;
 import com.viaoa.graph.service.object.OAObjectKeyService;
 import com.viaoa.graph.service.object.OAObjectPropertyService;
@@ -238,7 +238,7 @@ public class UpdateDelegate {
 				OAPropertyInfo pi = oi.getPropertyInfo(column.propertyName);
 				if (pi != null && pi.isBlob()) {
 					Object obj = og.objectsInternal().callObjectPropertyGetProperty(oaObj, column.propertyName, true, true);
-					if (obj == OANotExist.instance) {
+					if (obj == OAMatchNotExist.instance) {
 						continue; // not loaded, no change to it
 					}
 				}

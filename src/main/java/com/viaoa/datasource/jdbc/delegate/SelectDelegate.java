@@ -34,7 +34,7 @@ import com.viaoa.datasource.jdbc.db.ManyToMany;
 import com.viaoa.datasource.jdbc.db.Table;
 import com.viaoa.datasource.jdbc.query.QueryConverter;
 import com.viaoa.datasource.jdbc.query.ResultSetIterator;
-import com.viaoa.graph.OAGraphInternal;
+import com.viaoa.graph.api.internal.OAGraphInternal;
 import com.viaoa.graph.service.object.OAObjectInfoService;
 import com.viaoa.graph.service.object.OAObjectKeyService;
 import com.viaoa.lang.OAString;
