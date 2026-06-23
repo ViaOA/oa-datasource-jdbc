@@ -228,10 +228,10 @@ public class OADataSourceJDBC extends OADataSource {
 		}
 		final OAGraphInternal og = (OAGraphInternal) OARuntime.graph(object);
 		try {
-			og.objectsInternal().callObjectDSSetAssigningId(object, true);
+			og.internal().objects().ds().setAssigningId(object, true);
 			_assignId(object);
 		} finally {
-			og.objectsInternal().callObjectDSSetAssigningId(object, false);
+			og.internal().objects().ds().setAssigningId(object, false);
 		}
 	}
 
@@ -321,7 +321,7 @@ public class OADataSourceJDBC extends OADataSource {
 	 */
 	protected void _update(OAObject object, String[] includeProperties, String[] excludeProperties) {
 		final OAGraphInternal og = (OAGraphInternal) OARuntime.graph(object);
-		OAObjectKey key = og.objectsInternal().callObjectKeyGetKey(object);
+		OAObjectKey key = og.internal().objects().key().getKey(object);
 		LOG.finer("object=" + object.getClass() + ", key=" + key);
 		UpdateDelegate.update(this, object, includeProperties, excludeProperties);
 	}
@@ -363,7 +363,7 @@ public class OADataSourceJDBC extends OADataSource {
 	 */
 	protected void _insert(OAObject object) {
 		final OAGraphInternal og = (OAGraphInternal) OARuntime.graph(object);
-		OAObjectKey key = og.objectsInternal().callObjectKeyGetKey(object);
+		OAObjectKey key = og.internal().objects().key().getKey(object);
 		LOG.finer("object=" + object.getClass() + ", key=" + key + ", isNew=" + object.isNew());
 		InsertDelegate.insert(this, object);
 	}
@@ -377,7 +377,7 @@ public class OADataSourceJDBC extends OADataSource {
 	 */
 	public @Override void insertWithoutReferences(OAObject obj) {
 		final OAGraphInternal og = (OAGraphInternal) OARuntime.graph(obj);
-		OAObjectKey key = og.objectsInternal().callObjectKeyGetKey(obj);
+		OAObjectKey key = og.internal().objects().key().getKey(obj);
 		LOG.fine("object=" + obj.getClass() + ", key=" + key + ", isNew=" + obj.isNew());
 		InsertDelegate.insertWithoutReferences(this, obj);
 	}
@@ -390,7 +390,7 @@ public class OADataSourceJDBC extends OADataSource {
 	 */
 	public @Override void delete(OAObject object) {
 		final OAGraphInternal og = (OAGraphInternal) OARuntime.graph(object);
-		OAObjectKey key = og.objectsInternal().callObjectKeyGetKey(object);
+		OAObjectKey key = og.internal().objects().key().getKey(object);
 		LOG.fine("object=" + object.getClass().getSimpleName() + ", key=" + key);
 		DeleteDelegate.delete(this, object);
 	}
@@ -421,7 +421,7 @@ public class OADataSourceJDBC extends OADataSource {
 	 */
 	public @Override void updateMany2ManyLinks(OAObject masterObject, OAObject[] adds, OAObject[] removes, String propFromMaster) {
 		final OAGraphInternal og = (OAGraphInternal) OARuntime.graph(masterObject);
-		OAObjectKey key = og.objectsInternal().callObjectKeyGetKey(masterObject);
+		OAObjectKey key = og.internal().objects().key().getKey(masterObject);
 		LOG.finer("object=" + masterObject.getClass().getSimpleName() + ", key=" + key);
 		UpdateDelegate.updateMany2ManyLinks(this, masterObject, adds, removes, propFromMaster);
 	}

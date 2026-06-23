@@ -83,10 +83,10 @@ public class AutonumberDelegate {
 
 		final OAGraphInternal og = (OAGraphInternal) OARuntime.graph(object);
 		try {
-			og.objectsInternal().callObjectDSSetAssigningId(object, true);
-			og.objectsInternal().callObjectReflectSetProperty(object, column.propertyName, value, null);
+			og.internal().objects().ds().setAssigningId(object, true);
+			og.internal().objects().reflect().setProperty(object, column.propertyName, value, null);
 		} finally {
-			og.objectsInternal().callObjectDSSetAssigningId(object, false);
+			og.internal().objects().ds().setAssigningId(object, false);
 		}
 	}
 

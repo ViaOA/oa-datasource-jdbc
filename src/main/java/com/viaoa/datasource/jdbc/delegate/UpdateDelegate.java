@@ -234,10 +234,10 @@ public class UpdateDelegate {
 			// 20130318 check for blob
 			if (column.type == java.sql.Types.BLOB) {
 				final OAGraphInternal og = (OAGraphInternal) OARuntime.graph(oaObj);
-				OAObjectInfo oi = og.objectsInternal().callObjectInfoGetOAObjectInfo(oaObj);
+				OAObjectInfo oi = og.internal().objects().info().getOAObjectInfo(oaObj);
 				OAPropertyInfo pi = oi.getPropertyInfo(column.propertyName);
 				if (pi != null && pi.isBlob()) {
-					Object obj = og.objectsInternal().callObjectPropertyGetProperty(oaObj, column.propertyName, true, true);
+					Object obj = og.internal().objects().property().getProperty(oaObj, column.propertyName, true, true);
 					if (obj == OAMatchNotExist.instance) {
 						continue; // not loaded, no change to it
 					}
@@ -350,7 +350,7 @@ public class UpdateDelegate {
     			}
     
 				final OAGraphInternal og = (OAGraphInternal) OARuntime.graph(oaObj);
-    			OAObjectKey key = og.objectsInternal().callObjectReflectGetPropertyObjectKey(oaObj, links[i].propertyName);
+    			OAObjectKey key = og.internal().objects().reflect().getPropertyObjectKey(oaObj, links[i].propertyName);
     			Object[] ids;
     			if (key != null) {
     				ids = key.getObjectIds();

@@ -198,7 +198,7 @@ public class SelectDelegate {
 			queries[0] = "SELECT " + ds.getDBMetaData().distinctKeyword + " " + qc.getPrimaryKeyColumns(clazz) + s + " " + queries[0];
 
 			final OAGraphInternal og = (OAGraphInternal) OARuntime.graph(clazz);
-			OAObjectInfo oi = og.objectsInternal().callObjectInfoGetOAObjectInfo(clazz);
+			OAObjectInfo oi = og.internal().objects().info().getOAObjectInfo(clazz);
 			String[] ids = oi.getIdProperties();
 			params = new Object[ids.length];
 			queries[1] = "";
@@ -384,7 +384,7 @@ public class SelectDelegate {
 			}
 		} else {
 			final OAGraphInternal og = (OAGraphInternal) OARuntime.graph(whereObject);
-			OAObjectKey key = og.objectsInternal().callObjectKeyGetKey(whereObject);
+			OAObjectKey key = og.internal().objects().key().getKey(whereObject);
 			params = key.getObjectIds();
 		}
 
@@ -433,7 +433,7 @@ public class SelectDelegate {
 
 				// query columns must match same order as used by objKey properties
 				final OAGraphInternal og = (OAGraphInternal) OARuntime.graph(clazz);
-				OAObjectInfo oi = og.objectsInternal().callObjectInfoGetObjectInfo(clazz);
+				OAObjectInfo oi = og.internal().objects().info().getObjectInfo(clazz);
 				boolean b = false;
 				String[] ss = oi.getKeyProperties();
 				if (ss != null) {
@@ -458,7 +458,7 @@ public class SelectDelegate {
 
 				// query columns must match same order as used by objKey properties
 				final OAGraphInternal og = (OAGraphInternal) OARuntime.graph(clazz);
-				OAObjectInfo oi = og.objectsInternal().callObjectInfoGetObjectInfo(clazz);
+				OAObjectInfo oi = og.internal().objects().info().getObjectInfo(clazz);
 				boolean b = false;
 				String[] ss = oi.getKeyProperties();
 				if (ss != null) {
@@ -1061,8 +1061,8 @@ public class SelectDelegate {
 			
 			al = new ArrayList<>();
 			while (rs.next()) {
-				OAObjectKey ok1 = og.objectsInternal().callObjectKeyCreateObjectKey((Object) rs.getInt(1));
-				OAObjectKey ok2 = og.objectsInternal().callObjectKeyCreateObjectKey((Object) rs.getInt(2));
+				OAObjectKey ok1 = og.internal().objects().key().createObjectKey((Object) rs.getInt(1));
+				OAObjectKey ok2 = og.internal().objects().key().createObjectKey((Object) rs.getInt(2));
 				al.add(new ManyToMany(ok1, ok2));
 			}
 		} catch (Exception e) {

@@ -102,8 +102,8 @@ public class OAJdbcPreLoader extends OAPreLoader{
     	OAGraphInternal ogB = (OAGraphInternal) OARuntime.graph(classB);
 		
 		for (ManyToMany mm : alManyToMany) {
-			Object objA = ogA.objectsInternal().callObjectCacheGet(classA, mm.ok1);
-			Object objB = ogB.objectsInternal().callObjectCacheGet(classB, mm.ok2);
+			Object objA = ogA.internal().objects().cache().get(classA, mm.ok1);
+			Object objB = ogB.internal().objects().cache().get(classB, mm.ok2);
 			if (objA == null || objB == null) {
 				continue;
 			}
@@ -111,12 +111,12 @@ public class OAJdbcPreLoader extends OAPreLoader{
 			if (!liA.getPrivateMethod()) {
 				Hub hub;
 				OAGraphInternal ogX = (OAGraphInternal) OARuntime.graph((OAObject) objA);
-				Object objx = ogX.objectsInternal().callObjectPropertyGetProperty((OAObject) objA, liA.getName(), false, true);
+				Object objx = ogX.internal().objects().property().getProperty((OAObject) objA, liA.getName(), false, true);
 				if (objx instanceof Hub) {
 					hub = (Hub) objx;
 				} else {
 					hub = new Hub(classB);
-					ogX.objectsInternal().callObjectPropertySetProperty((OAObject) objA, liA.getName(), hub);
+					ogX.internal().objects().property().setProperty((OAObject) objA, liA.getName(), hub);
 				}
 				hub.add((OAObject) objB);
 			}
@@ -124,12 +124,12 @@ public class OAJdbcPreLoader extends OAPreLoader{
 			if (!liB.getPrivateMethod()) {
 				Hub hub;
 				OAGraphInternal ogX = (OAGraphInternal) OARuntime.graph((OAObject) objB);
-				Object objx = ogX.objectsInternal().callObjectPropertyGetProperty((OAObject) objB, liB.getName(), false, true);
+				Object objx = ogX.internal().objects().property().getProperty((OAObject) objB, liB.getName(), false, true);
 				if (objx instanceof Hub) {
 					hub = (Hub) objx;
 				} else {
 					hub = new Hub(classA);
-					ogX.objectsInternal().callObjectPropertySetProperty((OAObject) objB, liB.getName(), hub);
+					ogX.internal().objects().property().setProperty((OAObject) objB, liB.getName(), hub);
 				}
 				hub.add((OAObject) objA);
 			}

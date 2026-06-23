@@ -130,7 +130,7 @@ public class Link {
             Class clazz = table.getSupportClass();
             if (clazz != null && propertyName != null && propertyName.length() != 0) {
 				final OAGraphInternal og = (OAGraphInternal) OARuntime.graph(clazz);
-                methodGet = og.objectsInternal().callObjectInfoGetMethod(clazz, "get" + propertyName);
+                methodGet = og.internal().objects().info().getMethod(clazz, "get" + propertyName);
                 //was: methodGet = OAReflect.getMethod(clazz, "get"+propertyName);
             }
         }

@@ -462,7 +462,7 @@ public class ResultSetIterator implements OADataSourceIterator {
 		//        transaction.start();
 
 		final OAGraphInternal og = (OAGraphInternal) OARuntime.graph(clazz);
-		this.oi = og.objectsInternal().callObjectInfoGetOAObjectInfo(clazz);
+		this.oi = og.internal().objects().info().getOAObjectInfo(clazz);
 
 		DBMetaData dbmd = ds.getDBMetaData();
 		this.bDatesIncludeTime = dbmd.getDatesIncludeTime();
@@ -722,7 +722,7 @@ public class ResultSetIterator implements OADataSourceIterator {
 				bSetChangedAndNew = true;
 
 				if (bLoadedObject) {
-					OAObject objx = (OAObject) og.objectsInternal().callObjectCacheAdd(oaObject, false, true);
+					OAObject objx = (OAObject) og.internal().objects().cache().add(oaObject, false, true);
 					if (objx != oaObject) {
 						oaObject = objx;
 					}
@@ -757,7 +757,7 @@ public class ResultSetIterator implements OADataSourceIterator {
 						pkeyValues[columnInfos[i].pkeyPos] = values[i];
 						if (i == lastPkeyColumn) {
 							// try to find existing object
-							oaObject = (OAObject) og.objectsInternal().callObjectCacheGet(clazz, new OAObjectKey(pkeyValues));
+							oaObject = (OAObject) og.internal().objects().cache().get(clazz, new OAObjectKey(pkeyValues));
 							if (oaObject != null && !bDirty) {
 								break;
 							}
@@ -769,7 +769,7 @@ public class ResultSetIterator implements OADataSourceIterator {
 					boolean bNew;
 					if (oaObject == null) {
 						bNew = true;
-						oaObject = (OAObject) og.objectsInternal().callObjectReflectCreateNewObject(clazz);
+						oaObject = (OAObject) og.internal().objects().reflect().createNewObject(clazz);
 					} else {
 						bNew = false;
 					}
@@ -783,7 +783,7 @@ public class ResultSetIterator implements OADataSourceIterator {
 								oaObject.setProperty(columns[i].propertyName, values[i]);
 							} catch (Exception e) {
 								if (bNew && columnInfos[i].pkeyPos >= 0) {
-									OAObject objx = (OAObject) og.objectsInternal().callObjectCacheGet(clazz, new OAObjectKey(pkeyValues));
+									OAObject objx = (OAObject) og.internal().objects().cache().get(clazz, new OAObjectKey(pkeyValues));
 									if (objx != null) {
 										LOG.log(Level.WARNING, "Error while setting property " + columns[i].propertyName
 												+ ", object has been found in cache, so everything is good", e);
@@ -822,10 +822,10 @@ public class ResultSetIterator implements OADataSourceIterator {
 					}
 
 					if (bNew && oi.getAddToCache()) { // 20110731 add to cache, OAThreadLocal.SkipObjectInitialize
-						oaObject = (OAObject) og.objectsInternal().callObjectCacheAdd(oaObject, false, true);
+						oaObject = (OAObject) og.internal().objects().cache().add(oaObject, false, true);
 					}
 
-					og.objectsInternal().callObjectSetNew(oaObject, false);
+					og.internal().objects().state().setNew(oaObject, false);
 					oaObject.setChanged(false);
 					bLoadedObject = true;
 					bSetChangedAndNew = true;
@@ -861,7 +861,7 @@ public class ResultSetIterator implements OADataSourceIterator {
 			throw new RuntimeException(e);
 		} finally {
 			if (bLoadedObject && !bSetChangedAndNew && oaObject != null) {
-				og.objectsInternal().callObjectSetNew(oaObject, false);
+				og.internal().objects().state().setNew(oaObject, false);
 				oaObject.setChanged(false);
 			}
 			if (bDataSourceLoadingObject) {

@@ -56,7 +56,7 @@ public class DeleteDelegate {
 		}
 		if (object.getNew()) {
 			final OAGraphInternal og = (OAGraphInternal) OARuntime.graph(object);
-			LOG.finer("delete called on a new object, class=" + object.getClass().getName() + ", key=" + og.objectsInternal().callObjectKeyGetKey(object));
+			LOG.finer("delete called on a new object, class=" + object.getClass().getName() + ", key=" + og.internal().objects().key().getKey(object));
 			return;
 		}
 		delete(ds, object, object.getClass());

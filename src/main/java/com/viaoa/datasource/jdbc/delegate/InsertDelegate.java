@@ -271,7 +271,7 @@ public class InsertDelegate {
     			}
     
 				final OAGraphInternal og = (OAGraphInternal) OARuntime.graph(oaObj);
-    			OAObjectKey key = og.objectsInternal().callObjectReflectGetPropertyObjectKey(oaObj, links[i].propertyName);
+    			OAObjectKey key = og.internal().objects().reflect().getPropertyObjectKey(oaObj, links[i].propertyName);
     			if (key == null) {
     				continue; // null
     			}
@@ -403,10 +403,10 @@ public class InsertDelegate {
 
 					final OAGraphInternal og = (OAGraphInternal) OARuntime.graph(oaObj);
 					try {
-						og.objectsInternal().callObjectDSSetAssigningId(oaObj, true);
+						og.internal().objects().ds().setAssigningId(oaObj, true);
 						oaObj.setProperty(columnAutoGen.propertyName, val);
 					} finally {
-						og.objectsInternal().callObjectDSSetAssigningId(oaObj, false);
+						og.internal().objects().ds().setAssigningId(oaObj, false);
 					}
 				}
 				rs.close();
