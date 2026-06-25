@@ -37,11 +37,11 @@ import com.viaoa.datasource.jdbc.db.DataAccessObject;
 import com.viaoa.datetime.OADate;
 import com.viaoa.datetime.OADateTime;
 import com.viaoa.datetime.OATime;
-import com.viaoa.graph.OAGraph;
-import com.viaoa.graph.sibling.OASiblingHelper;
 import com.viaoa.hub.Hub;
 import com.viaoa.lang.OAString;
 import com.viaoa.metadata.OAObjectInfo;
+import com.viaoa.oa.OA;
+import com.viaoa.oa.sibling.OASiblingHelper;
 import com.viaoa.object.OAObject;
 import com.viaoa.object.OAObjectKey;
 import com.viaoa.performance.OAPerformance;
@@ -461,8 +461,8 @@ public class ResultSetIterator implements OADataSourceIterator {
 		//        transaction = new OATransaction(Connection.TRANSACTION_READ_COMMITTED);
 		//        transaction.start();
 
-		final OAGraph og =  OARuntime.graph(clazz);
-		this.oi = og.internal().objects().info().getOAObjectInfo(clazz);
+		final OA oa =  OARuntime.oa(clazz);
+		this.oi = oa.internal().objects().info().getOAObjectInfo(clazz);
 
 		DBMetaData dbmd = ds.getDBMetaData();
 		this.bDatesIncludeTime = dbmd.getDatesIncludeTime();
@@ -655,7 +655,7 @@ public class ResultSetIterator implements OADataSourceIterator {
 			return false;
 		}
 
-		final OAGraph og =  OARuntime.graph(clazz);
+		final OA oa =  OARuntime.oa(clazz);
 		
 		boolean bDataSourceLoadingObject = true;
 		OAObject oaObject = null;
@@ -722,7 +722,7 @@ public class ResultSetIterator implements OADataSourceIterator {
 				bSetChangedAndNew = true;
 
 				if (bLoadedObject) {
-					OAObject objx = (OAObject) og.internal().objects().cache().add(oaObject, false, true);
+					OAObject objx = (OAObject) oa.internal().objects().cache().add(oaObject, false, true);
 					if (objx != oaObject) {
 						oaObject = objx;
 					}
@@ -757,7 +757,7 @@ public class ResultSetIterator implements OADataSourceIterator {
 						pkeyValues[columnInfos[i].pkeyPos] = values[i];
 						if (i == lastPkeyColumn) {
 							// try to find existing object
-							oaObject = (OAObject) og.internal().objects().cache().get(clazz, new OAObjectKey(pkeyValues));
+							oaObject = (OAObject) oa.internal().objects().cache().get(clazz, new OAObjectKey(pkeyValues));
 							if (oaObject != null && !bDirty) {
 								break;
 							}
@@ -769,7 +769,7 @@ public class ResultSetIterator implements OADataSourceIterator {
 					boolean bNew;
 					if (oaObject == null) {
 						bNew = true;
-						oaObject = (OAObject) og.internal().objects().reflect().createNewObject(clazz);
+						oaObject = (OAObject) oa.internal().objects().reflect().createNewObject(clazz);
 					} else {
 						bNew = false;
 					}
@@ -783,7 +783,7 @@ public class ResultSetIterator implements OADataSourceIterator {
 								oaObject.setProperty(columns[i].propertyName, values[i]);
 							} catch (Exception e) {
 								if (bNew && columnInfos[i].pkeyPos >= 0) {
-									OAObject objx = (OAObject) og.internal().objects().cache().get(clazz, new OAObjectKey(pkeyValues));
+									OAObject objx = (OAObject) oa.internal().objects().cache().get(clazz, new OAObjectKey(pkeyValues));
 									if (objx != null) {
 										LOG.log(Level.WARNING, "Error while setting property " + columns[i].propertyName
 												+ ", object has been found in cache, so everything is good", e);
@@ -822,10 +822,10 @@ public class ResultSetIterator implements OADataSourceIterator {
 					}
 
 					if (bNew && oi.getAddToCache()) { // 20110731 add to cache, OAThreadLocal.SkipObjectInitialize
-						oaObject = (OAObject) og.internal().objects().cache().add(oaObject, false, true);
+						oaObject = (OAObject) oa.internal().objects().cache().add(oaObject, false, true);
 					}
 
-					og.internal().objects().state().setNew(oaObject, false);
+					oa.internal().objects().state().setNew(oaObject, false);
 					oaObject.setChanged(false);
 					bLoadedObject = true;
 					bSetChangedAndNew = true;
@@ -861,7 +861,7 @@ public class ResultSetIterator implements OADataSourceIterator {
 			throw new RuntimeException(e);
 		} finally {
 			if (bLoadedObject && !bSetChangedAndNew && oaObject != null) {
-				og.internal().objects().state().setNew(oaObject, false);
+				oa.internal().objects().state().setNew(oaObject, false);
 				oaObject.setChanged(false);
 			}
 			if (bDataSourceLoadingObject) {

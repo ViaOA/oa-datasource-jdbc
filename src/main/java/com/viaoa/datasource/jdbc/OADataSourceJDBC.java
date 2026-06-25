@@ -42,13 +42,13 @@ import com.viaoa.datasource.jdbc.delegate.SelectDelegate;
 import com.viaoa.datasource.jdbc.delegate.UpdateDelegate;
 import com.viaoa.datasource.jdbc.delegate.VerifyDelegate;
 import com.viaoa.filter.OAFilter;
-import com.viaoa.graph.OAGraph;
-import com.viaoa.graph.service.object.OAObjectInfoService;
-import com.viaoa.graph.service.object.OAObjectKeyService;
 import com.viaoa.lang.OAArray;
 import com.viaoa.lang.OAString;
 import com.viaoa.metadata.OALinkInfo;
 import com.viaoa.metadata.OAObjectInfo;
+import com.viaoa.oa.OA;
+import com.viaoa.oa.service.object.OAObjectInfoService;
+import com.viaoa.oa.service.object.OAObjectKeyService;
 import com.viaoa.object.OAObject;
 import com.viaoa.object.OAObjectKey;
 import com.viaoa.path.OAPath;
@@ -228,12 +228,12 @@ public class OADataSourceJDBC extends OADataSource {
 		if (!bAssignNumberOnCreate) {
 			return;
 		}
-		final OAGraph og =  OARuntime.graph(object);
+		final OA oa =  OARuntime.oa(object);
 		try {
-			og.internal().objects().ds().setAssigningId(object, true);
+			oa.internal().objects().ds().setAssigningId(object, true);
 			_assignId(object);
 		} finally {
-			og.internal().objects().ds().setAssigningId(object, false);
+			oa.internal().objects().ds().setAssigningId(object, false);
 		}
 	}
 
@@ -322,8 +322,8 @@ public class OADataSourceJDBC extends OADataSource {
 	 * @param excludeProperties properties to exclude
 	 */
 	protected void _update(OAObject object, String[] includeProperties, String[] excludeProperties) {
-		final OAGraph og =  OARuntime.graph(object);
-		OAObjectKey key = og.internal().objects().key().getKey(object);
+		final OA oa =  OARuntime.oa(object);
+		OAObjectKey key = oa.internal().objects().key().getKey(object);
 		LOG.finer("object=" + object.getClass() + ", key=" + key);
 		UpdateDelegate.update(this, object, includeProperties, excludeProperties);
 	}
@@ -364,8 +364,8 @@ public class OADataSourceJDBC extends OADataSource {
 	 * @param object the object to insert
 	 */
 	protected void _insert(OAObject object) {
-		final OAGraph og =  OARuntime.graph(object);
-		OAObjectKey key = og.internal().objects().key().getKey(object);
+		final OA oa =  OARuntime.oa(object);
+		OAObjectKey key = oa.internal().objects().key().getKey(object);
 		LOG.finer("object=" + object.getClass() + ", key=" + key + ", isNew=" + object.isNew());
 		InsertDelegate.insert(this, object);
 	}
@@ -378,8 +378,8 @@ public class OADataSourceJDBC extends OADataSource {
 	 * @param obj the object to insert without references
 	 */
 	public @Override void insertWithoutReferences(OAObject obj) {
-		final OAGraph og =  OARuntime.graph(obj);
-		OAObjectKey key = og.internal().objects().key().getKey(obj);
+		final OA oa =  OARuntime.oa(obj);
+		OAObjectKey key = oa.internal().objects().key().getKey(obj);
 		LOG.fine("object=" + obj.getClass() + ", key=" + key + ", isNew=" + obj.isNew());
 		InsertDelegate.insertWithoutReferences(this, obj);
 	}
@@ -391,8 +391,8 @@ public class OADataSourceJDBC extends OADataSource {
 	 * @param object the object to delete
 	 */
 	public @Override void delete(OAObject object) {
-		final OAGraph og =  OARuntime.graph(object);
-		OAObjectKey key = og.internal().objects().key().getKey(object);
+		final OA oa =  OARuntime.oa(object);
+		OAObjectKey key = oa.internal().objects().key().getKey(object);
 		LOG.fine("object=" + object.getClass().getSimpleName() + ", key=" + key);
 		DeleteDelegate.delete(this, object);
 	}
@@ -422,8 +422,8 @@ public class OADataSourceJDBC extends OADataSource {
 	 * @param propFromMaster the property defining the relationship
 	 */
 	public @Override void updateMany2ManyLinks(OAObject masterObject, OAObject[] adds, OAObject[] removes, String propFromMaster) {
-		final OAGraph og =  OARuntime.graph(masterObject);
-		OAObjectKey key = og.internal().objects().key().getKey(masterObject);
+		final OA oa =  OARuntime.oa(masterObject);
+		OAObjectKey key = oa.internal().objects().key().getKey(masterObject);
 		LOG.finer("object=" + masterObject.getClass().getSimpleName() + ", key=" + key);
 		UpdateDelegate.updateMany2ManyLinks(this, masterObject, adds, removes, propFromMaster);
 	}

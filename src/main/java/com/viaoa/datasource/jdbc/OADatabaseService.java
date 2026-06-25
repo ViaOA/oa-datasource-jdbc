@@ -4,11 +4,11 @@ import java.lang.reflect.Method;
 
 import com.viaoa.annotation.*;
 import com.viaoa.datasource.jdbc.db.*;
-import com.viaoa.graph.OAGraph;
 import com.viaoa.lang.OAArray;
 import com.viaoa.lang.OAString;
 import com.viaoa.metadata.OAObjectInfo;
 import com.viaoa.metadata.OAPropertyInfo;
+import com.viaoa.oa.OA;
 import com.viaoa.object.OAObject;
 import com.viaoa.runtime.OARuntime;
 import com.viaoa.text.OATextCode;
@@ -312,10 +312,10 @@ public class OADatabaseService {
 	}
 	
 	public OAObjectInfo callInfoGetObjectInfo(Class<? extends OAObject> clazz) {
-		return OARuntime.graph(clazz).info(clazz);
+		return OARuntime.oa(clazz).info(clazz);
 	}
 	public Class<? extends OAObject> callAnnotationGetHubObjectClass(OAMany annotation, Method method) {
-		return OARuntime.graph().internal().objects().annotation().getHubObjectClass(annotation, method);
+		return OARuntime.oa().internal().objects().annotation().getHubObjectClass(annotation, method);
 	}
 }
 

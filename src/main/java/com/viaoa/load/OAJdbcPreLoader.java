@@ -23,11 +23,11 @@ import java.util.logging.Logger;
 import com.viaoa.datasource.OADataSource;
 import com.viaoa.datasource.jdbc.OADataSourceJDBC;
 import com.viaoa.datasource.jdbc.db.ManyToMany;
-import com.viaoa.graph.OAGraph;
 import com.viaoa.hub.Hub;
 import com.viaoa.lang.OAString;
 import com.viaoa.metadata.OALinkInfo;
 import com.viaoa.metadata.OAObjectInfo;
+import com.viaoa.oa.OA;
 import com.viaoa.object.OAObject;
 import com.viaoa.path.OAPath;
 import com.viaoa.runtime.OARuntime;
@@ -98,38 +98,38 @@ public class OAJdbcPreLoader extends OAPreLoader{
 			return;
 		}
 
-		OAGraph ogA = OARuntime.graph(classA);
-    	OAGraph ogB = OARuntime.graph(classB);
+		OA oaA = OARuntime.oa(classA);
+    	OA oaB = OARuntime.oa(classB);
 		
 		for (ManyToMany mm : alManyToMany) {
-			Object objA = ogA.internal().objects().cache().get(classA, mm.ok1);
-			Object objB = ogB.internal().objects().cache().get(classB, mm.ok2);
+			Object objA = oaA.internal().objects().cache().get(classA, mm.ok1);
+			Object objB = oaB.internal().objects().cache().get(classB, mm.ok2);
 			if (objA == null || objB == null) {
 				continue;
 			}
 
 			if (!liA.getPrivateMethod()) {
 				Hub hub;
-				OAGraph ogX = OARuntime.graph((OAObject) objA);
-				Object objx = ogX.internal().objects().property().getProperty((OAObject) objA, liA.getName(), false, true);
+				OA oaX = OARuntime.oa((OAObject) objA);
+				Object objx = oaX.internal().objects().property().getProperty((OAObject) objA, liA.getName(), false, true);
 				if (objx instanceof Hub) {
 					hub = (Hub) objx;
 				} else {
 					hub = new Hub(classB);
-					ogX.internal().objects().property().setProperty((OAObject) objA, liA.getName(), hub);
+					oaX.internal().objects().property().setProperty((OAObject) objA, liA.getName(), hub);
 				}
 				hub.add((OAObject) objB);
 			}
 
 			if (!liB.getPrivateMethod()) {
 				Hub hub;
-				OAGraph ogX = OARuntime.graph((OAObject) objB);
-				Object objx = ogX.internal().objects().property().getProperty((OAObject) objB, liB.getName(), false, true);
+				OA oaX = OARuntime.oa((OAObject) objB);
+				Object objx = oaX.internal().objects().property().getProperty((OAObject) objB, liB.getName(), false, true);
 				if (objx instanceof Hub) {
 					hub = (Hub) objx;
 				} else {
 					hub = new Hub(classA);
-					ogX.internal().objects().property().setProperty((OAObject) objB, liB.getName(), hub);
+					oaX.internal().objects().property().setProperty((OAObject) objB, liB.getName(), hub);
 				}
 				hub.add((OAObject) objA);
 			}

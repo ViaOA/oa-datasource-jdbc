@@ -29,10 +29,6 @@ import com.viaoa.datasource.jdbc.db.Database;
 import com.viaoa.datasource.jdbc.db.Index;
 import com.viaoa.datasource.jdbc.db.Link;
 import com.viaoa.datasource.jdbc.db.Table;
-import com.viaoa.graph.OAGraph;
-import com.viaoa.graph.service.object.OAObjectAnnotationService;
-import com.viaoa.graph.service.object.OAObjectHubService;
-import com.viaoa.graph.service.object.OAObjectInfoService;
 import com.viaoa.hub.Hub;
 import com.viaoa.hub.HubInternalBridge;
 import com.viaoa.lang.OAArray;
@@ -40,6 +36,10 @@ import com.viaoa.metadata.OACalcInfo;
 import com.viaoa.metadata.OALinkInfo;
 import com.viaoa.metadata.OAObjectInfo;
 import com.viaoa.metadata.OAPropertyInfo;
+import com.viaoa.oa.OA;
+import com.viaoa.oa.service.object.OAObjectAnnotationService;
+import com.viaoa.oa.service.object.OAObjectHubService;
+import com.viaoa.oa.service.object.OAObjectInfoService;
 import com.viaoa.object.OAObject;
 import com.viaoa.runtime.OARuntime;
 import com.viaoa.text.OATextCode;
@@ -97,7 +97,7 @@ public class OAJdbcAnnotationVerifier {
 		boolean[] bs = null;
 		int i;
 		String s;
-		final OAGraph og =  OARuntime.graph(clazz);
+		final OA oa =  OARuntime.oa(clazz);
 
 		Method[] methods = clazz.getDeclaredMethods(); // need to get all access types, since some could be private. qqqqqq does not get superclass methods
 

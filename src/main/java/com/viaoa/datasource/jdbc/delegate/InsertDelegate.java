@@ -26,9 +26,9 @@ import com.viaoa.datasource.jdbc.db.Column;
 import com.viaoa.datasource.jdbc.db.DBMetaData;
 import com.viaoa.datasource.jdbc.db.Link;
 import com.viaoa.datasource.jdbc.db.Table;
-import com.viaoa.graph.OAGraph;
-import com.viaoa.graph.service.object.OAObjectReflectService;
 import com.viaoa.lang.OAString;
+import com.viaoa.oa.OA;
+import com.viaoa.oa.service.object.OAObjectReflectService;
 import com.viaoa.object.OAObject;
 import com.viaoa.object.OAObjectKey;
 import com.viaoa.runtime.OARuntime;
@@ -270,8 +270,8 @@ public class InsertDelegate {
     				continue; // one2many, or one2one (where Key is the fkey)
     			}
     
-				final OAGraph og =  OARuntime.graph(oaObj);
-    			OAObjectKey key = og.internal().objects().reflect().getPropertyObjectKey(oaObj, links[i].propertyName);
+				final OA oa =  OARuntime.oa(oaObj);
+    			OAObjectKey key = oa.internal().objects().reflect().getPropertyObjectKey(oaObj, links[i].propertyName);
     			if (key == null) {
     				continue; // null
     			}
@@ -401,12 +401,12 @@ public class InsertDelegate {
 				if (rs.next()) {
 					Object val = rs.getObject(1);
 
-					final OAGraph og =  OARuntime.graph(oaObj);
+					final OA oa =  OARuntime.oa(oaObj);
 					try {
-						og.internal().objects().ds().setAssigningId(oaObj, true);
+						oa.internal().objects().ds().setAssigningId(oaObj, true);
 						oaObj.setProperty(columnAutoGen.propertyName, val);
 					} finally {
-						og.internal().objects().ds().setAssigningId(oaObj, false);
+						oa.internal().objects().ds().setAssigningId(oaObj, false);
 					}
 				}
 				rs.close();
