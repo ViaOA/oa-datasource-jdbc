@@ -37,7 +37,7 @@ import com.viaoa.datasource.jdbc.db.DataAccessObject;
 import com.viaoa.datetime.OADate;
 import com.viaoa.datetime.OADateTime;
 import com.viaoa.datetime.OATime;
-import com.viaoa.graph.api.internal.OAGraphInternal;
+import com.viaoa.graph.OAGraph;
 import com.viaoa.graph.sibling.OASiblingHelper;
 import com.viaoa.hub.Hub;
 import com.viaoa.lang.OAString;
@@ -461,7 +461,7 @@ public class ResultSetIterator implements OADataSourceIterator {
 		//        transaction = new OATransaction(Connection.TRANSACTION_READ_COMMITTED);
 		//        transaction.start();
 
-		final OAGraphInternal og = (OAGraphInternal) OARuntime.graph(clazz);
+		final OAGraph og =  OARuntime.graph(clazz);
 		this.oi = og.internal().objects().info().getOAObjectInfo(clazz);
 
 		DBMetaData dbmd = ds.getDBMetaData();
@@ -655,7 +655,7 @@ public class ResultSetIterator implements OADataSourceIterator {
 			return false;
 		}
 
-		final OAGraphInternal og = (OAGraphInternal) OARuntime.graph(clazz);
+		final OAGraph og =  OARuntime.graph(clazz);
 		
 		boolean bDataSourceLoadingObject = true;
 		OAObject oaObject = null;

@@ -21,6 +21,7 @@ import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Vector;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.locks.ReentrantLock;
@@ -756,15 +757,15 @@ public class ConnectionPool implements Runnable {
 	 * Includes driver, URL, user, connection counts, and per-connection statistics
 	 * such as statement usage, prepared-statement usage, and query counts.
 	 *
-	 * @param vec the vector to populate with diagnostic information
+	 * @param al the vector to populate with diagnostic information
 	 */
-	public void getInfo(Vector<Object> vec) {
-		vec.addElement("Driver: " + dbmd.driverJDBC);
-		vec.addElement("URL: " + dbmd.urlJDBC);
-		vec.addElement("User: " + dbmd.user);
-		vec.addElement("Min Connections: " + dbmd.minConnections);
-		vec.addElement("Max Connections: " + dbmd.maxConnections);
-		vec.addElement("Connections");
+	public void getInfo(List<String> al) {
+		al.add("Driver: " + dbmd.driverJDBC);
+		al.add("URL: " + dbmd.urlJDBC);
+		al.add("User: " + dbmd.user);
+		al.add("Min Connections: " + dbmd.minConnections);
+		al.add("Max Connections: " + dbmd.maxConnections);
+		al.add("Connections");
 
 		try {
 			lock.lock();
@@ -781,8 +782,8 @@ public class ConnectionPool implements Runnable {
 					s += (" * connection not available");
 				}
 
-				vec.addElement(s);
-				con.getInfo(vec);
+				al.add(s);
+				con.getInfo(al);
 			}
 		} finally {
 			lock.unlock();

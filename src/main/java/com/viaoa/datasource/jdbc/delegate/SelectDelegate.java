@@ -34,7 +34,7 @@ import com.viaoa.datasource.jdbc.db.ManyToMany;
 import com.viaoa.datasource.jdbc.db.Table;
 import com.viaoa.datasource.jdbc.query.QueryConverter;
 import com.viaoa.datasource.jdbc.query.ResultSetIterator;
-import com.viaoa.graph.api.internal.OAGraphInternal;
+import com.viaoa.graph.OAGraph;
 import com.viaoa.graph.service.object.OAObjectInfoService;
 import com.viaoa.graph.service.object.OAObjectKeyService;
 import com.viaoa.lang.OAString;
@@ -197,7 +197,7 @@ public class SelectDelegate {
 			//   the second query will then select the record using the pkey values in the where clause.
 			queries[0] = "SELECT " + ds.getDBMetaData().distinctKeyword + " " + qc.getPrimaryKeyColumns(clazz) + s + " " + queries[0];
 
-			final OAGraphInternal og = (OAGraphInternal) OARuntime.graph(clazz);
+			final OAGraph og =  OARuntime.graph(clazz);
 			OAObjectInfo oi = og.internal().objects().info().getOAObjectInfo(clazz);
 			String[] ids = oi.getIdProperties();
 			params = new Object[ids.length];
@@ -383,7 +383,7 @@ public class SelectDelegate {
 				hmPreparedStatementSql.put(wos, query);
 			}
 		} else {
-			final OAGraphInternal og = (OAGraphInternal) OARuntime.graph(whereObject);
+			final OAGraph og =  OARuntime.graph(whereObject);
 			OAObjectKey key = og.internal().objects().key().getKey(whereObject);
 			params = key.getObjectIds();
 		}
@@ -432,7 +432,7 @@ public class SelectDelegate {
 				sqlx += " FROM " + table.name + " WHERE ";
 
 				// query columns must match same order as used by objKey properties
-				final OAGraphInternal og = (OAGraphInternal) OARuntime.graph(clazz);
+				final OAGraph og =  OARuntime.graph(clazz);
 				OAObjectInfo oi = og.internal().objects().info().getObjectInfo(clazz);
 				boolean b = false;
 				String[] ss = oi.getKeyProperties();
@@ -457,7 +457,7 @@ public class SelectDelegate {
 				sqlNew += " FROM " + table.name + " WHERE ";
 
 				// query columns must match same order as used by objKey properties
-				final OAGraphInternal og = (OAGraphInternal) OARuntime.graph(clazz);
+				final OAGraph og =  OARuntime.graph(clazz);
 				OAObjectInfo oi = og.internal().objects().info().getObjectInfo(clazz);
 				boolean b = false;
 				String[] ss = oi.getKeyProperties();
@@ -1057,7 +1057,7 @@ public class SelectDelegate {
 			st = ds.getStatement(query);
 			ResultSet rs = st.executeQuery(query);
 
-			final OAGraphInternal og = (OAGraphInternal) OARuntime.graph(classFrom);
+			final OAGraph og =  OARuntime.graph(classFrom);
 			
 			al = new ArrayList<>();
 			while (rs.next()) {

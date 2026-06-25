@@ -26,7 +26,7 @@ import com.viaoa.datasource.jdbc.db.Column;
 import com.viaoa.datasource.jdbc.db.DBMetaData;
 import com.viaoa.datasource.jdbc.db.Link;
 import com.viaoa.datasource.jdbc.db.Table;
-import com.viaoa.graph.api.internal.OAGraphInternal;
+import com.viaoa.graph.OAGraph;
 import com.viaoa.graph.service.object.OAObjectReflectService;
 import com.viaoa.lang.OAString;
 import com.viaoa.object.OAObject;
@@ -270,7 +270,7 @@ public class InsertDelegate {
     				continue; // one2many, or one2one (where Key is the fkey)
     			}
     
-				final OAGraphInternal og = (OAGraphInternal) OARuntime.graph(oaObj);
+				final OAGraph og =  OARuntime.graph(oaObj);
     			OAObjectKey key = og.internal().objects().reflect().getPropertyObjectKey(oaObj, links[i].propertyName);
     			if (key == null) {
     				continue; // null
@@ -401,7 +401,7 @@ public class InsertDelegate {
 				if (rs.next()) {
 					Object val = rs.getObject(1);
 
-					final OAGraphInternal og = (OAGraphInternal) OARuntime.graph(oaObj);
+					final OAGraph og =  OARuntime.graph(oaObj);
 					try {
 						og.internal().objects().ds().setAssigningId(oaObj, true);
 						oaObj.setProperty(columnAutoGen.propertyName, val);

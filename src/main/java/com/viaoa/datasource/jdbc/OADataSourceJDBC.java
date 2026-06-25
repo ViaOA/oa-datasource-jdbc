@@ -20,6 +20,7 @@ import java.sql.PreparedStatement;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -41,7 +42,7 @@ import com.viaoa.datasource.jdbc.delegate.SelectDelegate;
 import com.viaoa.datasource.jdbc.delegate.UpdateDelegate;
 import com.viaoa.datasource.jdbc.delegate.VerifyDelegate;
 import com.viaoa.filter.OAFilter;
-import com.viaoa.graph.api.internal.OAGraphInternal;
+import com.viaoa.graph.OAGraph;
 import com.viaoa.graph.service.object.OAObjectInfoService;
 import com.viaoa.graph.service.object.OAObjectKeyService;
 import com.viaoa.lang.OAArray;
@@ -211,8 +212,9 @@ public class OADataSourceJDBC extends OADataSource {
 	 *
 	 * @param vec the vector to populate with datasource information
 	 */
-	public void getInfo(Vector vec) {
-		connectionPool.getInfo(vec);
+	@Override
+	public void getInfo(List<String> al) {
+		connectionPool.getInfo(al);
 	}
 
 	/**
@@ -226,7 +228,7 @@ public class OADataSourceJDBC extends OADataSource {
 		if (!bAssignNumberOnCreate) {
 			return;
 		}
-		final OAGraphInternal og = (OAGraphInternal) OARuntime.graph(object);
+		final OAGraph og =  OARuntime.graph(object);
 		try {
 			og.internal().objects().ds().setAssigningId(object, true);
 			_assignId(object);
@@ -320,7 +322,7 @@ public class OADataSourceJDBC extends OADataSource {
 	 * @param excludeProperties properties to exclude
 	 */
 	protected void _update(OAObject object, String[] includeProperties, String[] excludeProperties) {
-		final OAGraphInternal og = (OAGraphInternal) OARuntime.graph(object);
+		final OAGraph og =  OARuntime.graph(object);
 		OAObjectKey key = og.internal().objects().key().getKey(object);
 		LOG.finer("object=" + object.getClass() + ", key=" + key);
 		UpdateDelegate.update(this, object, includeProperties, excludeProperties);
@@ -362,7 +364,7 @@ public class OADataSourceJDBC extends OADataSource {
 	 * @param object the object to insert
 	 */
 	protected void _insert(OAObject object) {
-		final OAGraphInternal og = (OAGraphInternal) OARuntime.graph(object);
+		final OAGraph og =  OARuntime.graph(object);
 		OAObjectKey key = og.internal().objects().key().getKey(object);
 		LOG.finer("object=" + object.getClass() + ", key=" + key + ", isNew=" + object.isNew());
 		InsertDelegate.insert(this, object);
@@ -376,7 +378,7 @@ public class OADataSourceJDBC extends OADataSource {
 	 * @param obj the object to insert without references
 	 */
 	public @Override void insertWithoutReferences(OAObject obj) {
-		final OAGraphInternal og = (OAGraphInternal) OARuntime.graph(obj);
+		final OAGraph og =  OARuntime.graph(obj);
 		OAObjectKey key = og.internal().objects().key().getKey(obj);
 		LOG.fine("object=" + obj.getClass() + ", key=" + key + ", isNew=" + obj.isNew());
 		InsertDelegate.insertWithoutReferences(this, obj);
@@ -389,7 +391,7 @@ public class OADataSourceJDBC extends OADataSource {
 	 * @param object the object to delete
 	 */
 	public @Override void delete(OAObject object) {
-		final OAGraphInternal og = (OAGraphInternal) OARuntime.graph(object);
+		final OAGraph og =  OARuntime.graph(object);
 		OAObjectKey key = og.internal().objects().key().getKey(object);
 		LOG.fine("object=" + object.getClass().getSimpleName() + ", key=" + key);
 		DeleteDelegate.delete(this, object);
@@ -420,7 +422,7 @@ public class OADataSourceJDBC extends OADataSource {
 	 * @param propFromMaster the property defining the relationship
 	 */
 	public @Override void updateMany2ManyLinks(OAObject masterObject, OAObject[] adds, OAObject[] removes, String propFromMaster) {
-		final OAGraphInternal og = (OAGraphInternal) OARuntime.graph(masterObject);
+		final OAGraph og =  OARuntime.graph(masterObject);
 		OAObjectKey key = og.internal().objects().key().getKey(masterObject);
 		LOG.finer("object=" + masterObject.getClass().getSimpleName() + ", key=" + key);
 		UpdateDelegate.updateMany2ManyLinks(this, masterObject, adds, removes, propFromMaster);

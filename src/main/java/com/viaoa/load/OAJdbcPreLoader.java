@@ -23,7 +23,7 @@ import java.util.logging.Logger;
 import com.viaoa.datasource.OADataSource;
 import com.viaoa.datasource.jdbc.OADataSourceJDBC;
 import com.viaoa.datasource.jdbc.db.ManyToMany;
-import com.viaoa.graph.api.internal.OAGraphInternal;
+import com.viaoa.graph.OAGraph;
 import com.viaoa.hub.Hub;
 import com.viaoa.lang.OAString;
 import com.viaoa.metadata.OALinkInfo;
@@ -98,8 +98,8 @@ public class OAJdbcPreLoader extends OAPreLoader{
 			return;
 		}
 
-		OAGraphInternal ogA = (OAGraphInternal) OARuntime.graph(classA);
-    	OAGraphInternal ogB = (OAGraphInternal) OARuntime.graph(classB);
+		OAGraph ogA = OARuntime.graph(classA);
+    	OAGraph ogB = OARuntime.graph(classB);
 		
 		for (ManyToMany mm : alManyToMany) {
 			Object objA = ogA.internal().objects().cache().get(classA, mm.ok1);
@@ -110,7 +110,7 @@ public class OAJdbcPreLoader extends OAPreLoader{
 
 			if (!liA.getPrivateMethod()) {
 				Hub hub;
-				OAGraphInternal ogX = (OAGraphInternal) OARuntime.graph((OAObject) objA);
+				OAGraph ogX = OARuntime.graph((OAObject) objA);
 				Object objx = ogX.internal().objects().property().getProperty((OAObject) objA, liA.getName(), false, true);
 				if (objx instanceof Hub) {
 					hub = (Hub) objx;
@@ -123,7 +123,7 @@ public class OAJdbcPreLoader extends OAPreLoader{
 
 			if (!liB.getPrivateMethod()) {
 				Hub hub;
-				OAGraphInternal ogX = (OAGraphInternal) OARuntime.graph((OAObject) objB);
+				OAGraph ogX = OARuntime.graph((OAObject) objB);
 				Object objx = ogX.internal().objects().property().getProperty((OAObject) objB, liB.getName(), false, true);
 				if (objx instanceof Hub) {
 					hub = (Hub) objx;

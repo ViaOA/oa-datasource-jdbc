@@ -26,7 +26,7 @@ import com.viaoa.datasource.jdbc.db.Column;
 import com.viaoa.datasource.jdbc.db.DBMetaData;
 import com.viaoa.datasource.jdbc.db.Link;
 import com.viaoa.datasource.jdbc.db.Table;
-import com.viaoa.graph.api.internal.OAGraphInternal;
+import com.viaoa.graph.OAGraph;
 import com.viaoa.graph.service.object.OAObjectInfoService;
 import com.viaoa.graph.service.object.OAObjectKeyService;
 import com.viaoa.graph.service.object.OAObjectPropertyService;
@@ -233,7 +233,7 @@ public class UpdateDelegate {
 
 			// 20130318 check for blob
 			if (column.type == java.sql.Types.BLOB) {
-				final OAGraphInternal og = (OAGraphInternal) OARuntime.graph(oaObj);
+				final OAGraph og =  OARuntime.graph(oaObj);
 				OAObjectInfo oi = og.internal().objects().info().getOAObjectInfo(oaObj);
 				OAPropertyInfo pi = oi.getPropertyInfo(column.propertyName);
 				if (pi != null && pi.isBlob()) {
@@ -349,7 +349,7 @@ public class UpdateDelegate {
     				}
     			}
     
-				final OAGraphInternal og = (OAGraphInternal) OARuntime.graph(oaObj);
+				final OAGraph og =  OARuntime.graph(oaObj);
     			OAObjectKey key = og.internal().objects().reflect().getPropertyObjectKey(oaObj, links[i].propertyName);
     			Object[] ids;
     			if (key != null) {

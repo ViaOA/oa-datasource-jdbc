@@ -17,7 +17,7 @@ package com.viaoa.datasource.jdbc.db;
 
 import java.lang.reflect.*;
 
-import com.viaoa.graph.api.internal.OAGraphInternal;
+import com.viaoa.graph.OAGraph;
 import com.viaoa.graph.service.object.OAObjectInfoService;
 import com.viaoa.runtime.OARuntime;
 
@@ -129,7 +129,7 @@ public class Link {
         if (methodGet == null && table != null) {
             Class clazz = table.getSupportClass();
             if (clazz != null && propertyName != null && propertyName.length() != 0) {
-				final OAGraphInternal og = (OAGraphInternal) OARuntime.graph(clazz);
+				final OAGraph og =  OARuntime.graph(clazz);
                 methodGet = og.internal().objects().info().getMethod(clazz, "get" + propertyName);
                 //was: methodGet = OAReflect.getMethod(clazz, "get"+propertyName);
             }

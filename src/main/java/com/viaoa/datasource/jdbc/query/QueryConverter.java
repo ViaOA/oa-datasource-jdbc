@@ -29,7 +29,7 @@ import com.viaoa.datasource.jdbc.db.Database;
 import com.viaoa.datasource.jdbc.db.Link;
 import com.viaoa.datasource.jdbc.db.Table;
 import com.viaoa.datasource.jdbc.delegate.ConverterDelegate;
-import com.viaoa.graph.api.internal.OAGraphInternal;
+import com.viaoa.graph.OAGraph;
 import com.viaoa.graph.service.object.OAObjectInfoService;
 import com.viaoa.graph.service.object.OAObjectKeyService;
 import com.viaoa.graph.service.object.OAObjectReflectService;
@@ -289,7 +289,7 @@ public class QueryConverter {
 
 		for (int ii = 0; classes != null && ii < classes.length; ii++) {
 			Class c = classes[ii];
-			final OAGraphInternal og = (OAGraphInternal) OARuntime.graph(c);
+			final OAGraph og =  OARuntime.graph(c);
 			OAObjectInfo oi = og.internal().objects().info().getObjectInfo(c);
 
 			Table table = database.getTable(c);
@@ -712,17 +712,17 @@ public class QueryConverter {
 
 			OAObjectKey key;
 			if (toFkeys[0].primaryKey) {
-				final OAGraphInternal og = (OAGraphInternal) OARuntime.graph((OAObject) whereObject);
+				final OAGraph og =  OARuntime.graph((OAObject) whereObject);
 				key = og.internal().objects().key().getKey((OAObject) whereObject);
 			} else {
 				// 20090621
-				OAGraphInternal og = (OAGraphInternal) OARuntime.graph((OAObject) whereObject);
+				OAGraph og =  OARuntime.graph((OAObject) whereObject);
 				Object obj = og.internal().objects().reflect().getRawReference((OAObject) whereObject, propertyFromWhereObject);
 				if (obj instanceof OAObjectKey) {
 					key = (OAObjectKey) obj;
 				} else {
 					if (obj instanceof OAObject) {
-						og = (OAGraphInternal) OARuntime.graph((OAObject) obj);
+						og = OARuntime.graph((OAObject) obj);
 						key = og.internal().objects().key().getKey((OAObject) obj);
 					} else {
 						key = null;
@@ -811,17 +811,17 @@ public class QueryConverter {
 
 			OAObjectKey key;
 			if (toFkeys[0].primaryKey) {
-				final OAGraphInternal og = (OAGraphInternal) OARuntime.graph((OAObject) whereObject);
+				final OAGraph og =  OARuntime.graph((OAObject) whereObject);
 				key = og.internal().objects().key().getKey((OAObject) whereObject);
 			} else {
 				// 20090621
-				OAGraphInternal og = (OAGraphInternal) OARuntime.graph((OAObject) whereObject);
+				OAGraph og =  OARuntime.graph((OAObject) whereObject);
 				Object obj = og.internal().objects().reflect().getRawReference((OAObject) whereObject, propertyFromWhereObject);
 				if (obj instanceof OAObjectKey) {
 					key = (OAObjectKey) obj;
 				} else {
 					if (obj instanceof OAObject) {
-						og = (OAGraphInternal) OARuntime.graph((OAObject) obj);
+						og = OARuntime.graph((OAObject) obj);
 						key = og.internal().objects().key().getKey((OAObject) obj);
 					} else {
 						key = null;
@@ -2477,7 +2477,7 @@ public class QueryConverter {
 					links[i].bMany = true;
 				} else {
 					// MANY ?
-					final OAGraphInternal og = (OAGraphInternal) OARuntime.graph(table.clazz);
+					final OAGraph og =  OARuntime.graph(table.clazz);
 					OAObjectInfo oi = og.internal().objects().info().getOAObjectInfo(table.clazz);
 					OALinkInfo li = og.internal().objects().info().getLinkInfo(oi, tabLinks[i].propertyName);
 					if (li != null && li.getType() == li.MANY) {
