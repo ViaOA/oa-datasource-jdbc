@@ -499,7 +499,7 @@ public class OADataSourceJDBC extends OADataSource {
 			} else if (queryWhere == null) {
 				queryWhere = "";
 			}
-			queryWhere += pp.getPropertyPath() + " == ?";
+			queryWhere += pp.getPath() + " == ?";
 			params = OAArray.add(Object.class, params, whereObject);
 			whereObject = null;
 			propertyFromWhereObject = null;
