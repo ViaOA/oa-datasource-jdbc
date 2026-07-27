@@ -722,6 +722,8 @@ public class ResultSetIterator implements OADataSourceIterator {
 				bSetChangedAndNew = true;
 
 				if (bLoadedObject) {
+//qqqqqqqqqqqqqqqqq					
+					oa.internal().objects().initialize().initializeAfterLoading(oaObject);
 					OAObject objx = (OAObject) oa.internal().objects().cache().add(oaObject, false, true);
 					if (objx != oaObject) {
 						oaObject = objx;
@@ -822,7 +824,12 @@ public class ResultSetIterator implements OADataSourceIterator {
 					}
 
 					if (bNew && oi.getAddToCache()) { // 20110731 add to cache, OAThreadLocal.SkipObjectInitialize
-						oaObject = (OAObject) oa.internal().objects().cache().add(oaObject, false, true);
+//qqqqqqqqqqqqqqqqq					
+oa.internal().objects().initialize().initializeAfterLoading(oaObject);
+						OAObject objx = (OAObject) oa.internal().objects().cache().add(oaObject, false, true);
+						if (objx != oaObject) {
+							oaObject = objx;
+						}
 					}
 
 					oa.internal().objects().state().setNew(oaObject, false);
