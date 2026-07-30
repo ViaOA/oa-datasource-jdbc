@@ -102,8 +102,8 @@ public class OAJdbcPreLoader extends OAPreLoader{
     	OA oaB = OARuntime.oa(classB);
 		
 		for (ManyToMany mm : alManyToMany) {
-			Object objA = oaA.internal().objects().cache().get(classA, mm.ok1);
-			Object objB = oaB.internal().objects().cache().get(classB, mm.ok2);
+			Object objA = oaA.internal().objects().cache().getUsingKey(classA, mm.ok1);
+			Object objB = oaB.internal().objects().cache().getUsingKey(classB, mm.ok2);
 			if (objA == null || objB == null) {
 				continue;
 			}

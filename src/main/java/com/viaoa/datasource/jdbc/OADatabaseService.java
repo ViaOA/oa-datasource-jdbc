@@ -8,7 +8,6 @@ import com.viaoa.lang.OAArray;
 import com.viaoa.lang.OAString;
 import com.viaoa.metadata.OAObjectInfo;
 import com.viaoa.metadata.OAPropertyInfo;
-import com.viaoa.oa.OA;
 import com.viaoa.object.OAObject;
 import com.viaoa.runtime.OARuntime;
 import com.viaoa.text.OATextCode;
@@ -77,6 +76,8 @@ public class OADatabaseService {
 				continue;
 			}
 
+			if (oaprop.isFkeyOnly()) continue;
+			
 			OAColumn dbcol = (OAColumn) m.getAnnotation(OAColumn.class);
 			if (dbcol == null) {
 				continue;

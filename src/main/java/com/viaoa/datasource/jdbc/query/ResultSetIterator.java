@@ -657,11 +657,13 @@ public class ResultSetIterator implements OADataSourceIterator {
 
 		final OA oa =  OARuntime.oa(clazz);
 		
-		boolean bDataSourceLoadingObject = true;
+		boolean bDataSourceLoadingObject = false;
+		boolean previousLoading = false;
 		OAObject oaObject = null;
 		boolean bLoadedObject = false;
 		boolean bSetChangedAndNew = false;
 		final OAThreadLocalService srvcThreadLocal = ((OAThreadService) OARuntime.thread()).getThreadLocalService();
+
 		try {
 			ResultSet resultSet = rs;
 			if (query2 != null) { // need to do a seperate select to get data for each row
@@ -706,14 +708,8 @@ public class ResultSetIterator implements OADataSourceIterator {
 			}
 
 			// 20221219 so that validation checks are not done (ex: unique values)
-			srvcThreadLocal.setLoading(true);
-			/* was
-			if (!bDirty) {
-				OARuntime.threadLocals().setLoading(true);
-			} else {
-				bDataSourceLoadingObject = false;
-			}
-			*/
+			bDataSourceLoadingObject = true;
+			previousLoading = srvcThreadLocal.setLoading(true);
 
 			if (!bDirty && dataAccessObject != null) {
 				resultSetInfo.reset(resultSet);
@@ -722,7 +718,6 @@ public class ResultSetIterator implements OADataSourceIterator {
 				bSetChangedAndNew = true;
 
 				if (bLoadedObject) {
-//qqqqqqqqqqqqqqqqq					
 					oa.internal().objects().initialize().initializeAfterLoading(oaObject);
 					OAObject objx = (OAObject) oa.internal().objects().cache().add(oaObject, false, true);
 					if (objx != oaObject) {
@@ -759,7 +754,7 @@ public class ResultSetIterator implements OADataSourceIterator {
 						pkeyValues[columnInfos[i].pkeyPos] = values[i];
 						if (i == lastPkeyColumn) {
 							// try to find existing object
-							oaObject = (OAObject) oa.internal().objects().cache().get(clazz, new OAObjectKey(pkeyValues));
+							oaObject = (OAObject) oa.internal().objects().cache().getUsingKey(clazz, new OAObjectKey(pkeyValues));
 							if (oaObject != null && !bDirty) {
 								break;
 							}
@@ -785,7 +780,7 @@ public class ResultSetIterator implements OADataSourceIterator {
 								oaObject.setProperty(columns[i].propertyName, values[i]);
 							} catch (Exception e) {
 								if (bNew && columnInfos[i].pkeyPos >= 0) {
-									OAObject objx = (OAObject) oa.internal().objects().cache().get(clazz, new OAObjectKey(pkeyValues));
+									OAObject objx = (OAObject) oa.internal().objects().cache().getUsingKey(clazz, new OAObjectKey(pkeyValues));
 									if (objx != null) {
 										LOG.log(Level.WARNING, "Error while setting property " + columns[i].propertyName
 												+ ", object has been found in cache, so everything is good", e);
@@ -824,8 +819,7 @@ public class ResultSetIterator implements OADataSourceIterator {
 					}
 
 					if (bNew && oi.getAddToCache()) { // 20110731 add to cache, OAThreadLocal.SkipObjectInitialize
-//qqqqqqqqqqqqqqqqq					
-oa.internal().objects().initialize().initializeAfterLoading(oaObject);
+						oa.internal().objects().initialize().initializeAfterLoading(oaObject);
 						OAObject objx = (OAObject) oa.internal().objects().cache().add(oaObject, false, true);
 						if (objx != oaObject) {
 							oaObject = objx;
@@ -842,7 +836,7 @@ oa.internal().objects().initialize().initializeAfterLoading(oaObject);
 			++cnter;
 
 			if (bDataSourceLoadingObject) {
-				srvcThreadLocal.setLoading(false);
+				srvcThreadLocal.setLoading(previousLoading);
 				bDataSourceLoadingObject = false;
 			}
 
@@ -859,11 +853,9 @@ oa.internal().objects().initialize().initializeAfterLoading(oaObject);
 			if (hubReadAhead != null) {
 				hubReadAhead.add(oaObject);
 			}
-
 			return true;
 		} catch (Exception e) {
-			String s = String.format(	"Exception in next(), thread=%s, query=%s, bClosed=%b", Thread.currentThread().getName(), query,
-										bClosed);
+			String s = String.format(	"Exception in next(), thread=%s, query=%s, bClosed=%b", Thread.currentThread().getName(), query, bClosed);
 			LOG.log(Level.WARNING, s, e);
 			throw new RuntimeException(e);
 		} finally {
@@ -872,7 +864,7 @@ oa.internal().objects().initialize().initializeAfterLoading(oaObject);
 				oaObject.setChanged(false);
 			}
 			if (bDataSourceLoadingObject) {
-				srvcThreadLocal.setLoading(false);
+				srvcThreadLocal.setLoading(previousLoading);
 			}
 		}
 	}
